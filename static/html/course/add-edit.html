@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <link rel="import" href="../head.html?__inline">
+    <title>新增私课</title>
+    <link rel="stylesheet" href="../../js/lib/j_picker/jquery-weui.min.css">
+	<link rel="stylesheet" href="../../js/lib/j_picker/weui.min.css">
+
+    <!--SCRIPT_PLACEHOLDER-->
+    <style>
+        .weui-picker-modal {
+            height: 5.5rem;
+        }
+
+        .toolbar,
+        .toolbar .title {
+            font-size: .3rem;
+        }
+
+        .toolbar .toolbar-inner {
+            height: 0.8rem;
+        }
+
+        .toolbar .picker-button {
+            height: 0.8rem;
+            line-height: 0.8rem;
+        }
+
+        .toolbar .title {
+            line-height: 0.8rem;
+        }
+
+        .weui-picker-modal .picker-items {
+            font-size: 0.3rem;
+        }
+
+        .weui-picker-modal .picker-modal-inner {
+            height: 4.7rem;
+        }
+
+        .picker-calendar-month-picker,
+        .picker-calendar-year-picker {
+            line-height: 0.8rem;
+        }
+
+        i.icon.icon-next,
+        i.icon.icon-prev {
+            width: .35rem;
+            height: .35rem;
+        }
+
+        .picker-calendar-month-picker a.icon-only,
+        .picker-calendar-year-picker a.icon-only {
+            height: 0.8rem;
+            line-height: 0.8rem;
+        }
+
+        .picker-calendar-month-picker .current-month-value,
+        .picker-calendar-month-picker .current-year-value,
+        .picker-calendar-year-picker .current-month-value,
+        .picker-calendar-year-picker .current-year-value {
+            height: 0.8rem;
+        }
+
+        .weui-picker-modal .picker-modal-inner {
+            height: 4.7rem;
+        }
+
+        .picker-calendar-week-days+.picker-calendar-months {
+            height: 4.3rem;
+        }
+
+        .picker-calendar-week-days {
+            height: .4rem;
+        }
+    </style>
+</head>
+
+<body>
+    <form id="formWrapper" class="course-wrapper">
+        <div class="course-item border-bottom-1px am-flexbox am-flexbox-justify-between">
+            <div class="am-flexbox am-flexbox-item am-flexbox-justify-between">
+                <span>周几上课</span>
+                <select class="over-select am-flexbox-item" name="skCycle" id="skCycle">
+                    <option value="2">周一</option>
+                    <option value="3">周二</option>
+                    <option value="4">周三</option>
+                    <option value="5">周四</option>
+                    <option value="6">周五</option>
+                    <option value="7">周六</option>
+                    <option value="1">周日</option>
+                </select>
+                <span class="fr" id="week"></span>
+            </div>
+            <i class="right-arrow"></i>
+        </div>
+        <div class="course-item border-bottom-1px am-flexbox am-flexbox-justify-between">
+            <div class="am-flexbox am-flexbox-item">
+                <span>上课时间</span>
+                <input id="skStartDatetime" name="skStartDatetime" class="time-select am-flexbox-item"/>
+            </div>
+            <i class="right-arrow"></i>
+        </div>
+        <div class="course-item border-bottom-1px am-flexbox am-flexbox-justify-between">
+            <div class="am-flexbox am-flexbox-item">
+                <span>下课时间</span>
+                <input id="skEndDatetime" name="skEndDatetime" class="time-select am-flexbox-item"/>
+            </div>
+            <i class="right-arrow"></i>
+        </div>
+        <div class="course-item border-bottom-1px am-flexbox">
+            <span>价格(元)</span>
+            <input class="amount-input am-flexbox-item" type="number" id="price" name="price" placeholder="请输入价格"/>
+        </div>
+    </form>
+    <div class="course-btn">
+        <button class="am-button am-button-primary" id="saveBtn">保存</button>
+    </div>
+    <link rel="import" href="../footer.html?__inline">
+    <script src="../../js/lib/j_picker/jquery-weui.min.js"></script>
+    <script>
+        require(['app/controller/course/AddEdit']);
+    </script>
+</body>
+
+</html>

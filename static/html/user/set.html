@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <link rel="import" href="../head.html?__inline">
+    <title>设置</title>
+    <!--SCRIPT_PLACEHOLDER-->
+</head>
+
+<body>
+    <div class="user-list-wrap">
+        <div class="user-list-item border-bottom-1px am-flexbox am-flexbox-justify-between">
+            <a href="./change-mobile.html" class="am-flexbox am-flexbox-item">
+                <span>修改手机号码</span>
+            </a>
+            <i class="right-arrow"></i>
+        </div>
+        <div class="user-list-item border-bottom-1px am-flexbox am-flexbox-justify-between">
+            <a href="./change-pwd.html" class="am-flexbox am-flexbox-item">
+                <span>修改登录密码</span>
+            </a>
+            <i class="right-arrow"></i>
+        </div>
+        <div class="user-list-item border-bottom-1px am-flexbox am-flexbox-justify-between">
+            <a href="./set-tradePwd.html" class="am-flexbox am-flexbox-item">
+                <span>支付密码</span>
+            </a>
+            <i class="right-arrow"></i>
+        </div>
+        <div class="user-list-item border-bottom-1px am-flexbox am-flexbox-justify-between">
+            <a href="../account/banklist.html" class="am-flexbox am-flexbox-item">
+                <span>我的银行卡</span>
+            </a>
+            <i class="right-arrow"></i>
+        </div>
+        <div class="user-list-item border-bottom-1px am-flexbox am-flexbox-justify-between">
+            <a href="./child-member.html" class="am-flexbox am-flexbox-item">
+                <span>我的获客</span>
+            </a>
+            <i class="right-arrow"></i>
+        </div>
+    </div>
+    <div class="am-whitespace-sm"></div>
+    <div class="user-list-wrap">
+        <div class="user-list-item border-bottom-1px am-flexbox am-flexbox-justify-between">
+            <a href="../notice/aboutus.html" class="am-flexbox am-flexbox-item">
+                <span>关于我们</span>
+            </a>
+            <i class="right-arrow"></i>
+        </div>
+    </div>
+    <div class="am-whitespace-xxl"></div>
+    <div class="normal-fix-footer">
+        <button id="logout" class="am-button am-button-primary">退出登录</button>
+    </div>
+    <link rel="import" href="../footer.html?__inline">
+    <script>
+        require(['app/controller/user/Set']);
+    </script>
+</body>
+
+</html>

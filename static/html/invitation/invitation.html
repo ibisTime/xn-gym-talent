@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <link rel="import" href="../head.html?__inline">
+    <title>推荐</title>
+    <!--SCRIPT_PLACEHOLDER-->
+</head>
+
+<body>
+    <div class="invitation-wrap">
+        <img src="../../images/bg@2x.png" class="invitation-bg">
+        <div id="qrCode" class="qr-code"></div>
+    </div>
+    <link rel="import" href="../footer.html?__inline">
+    <script src="../../js/lib/qrcode.js"></script>
+    <script>
+        require(['app/controller/invitation/Invitation']);
+    </script>
+</body>
+
+</html>

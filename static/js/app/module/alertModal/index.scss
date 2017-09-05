@@ -1,0 +1,98 @@
+.am-modal-wrapper {
+    .am-modal-mask {
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        height: 100%;
+        z-index: 999;
+        background-color: rgba(0,0,0,.4);
+    }
+
+    .am-modal-wrap {
+        position: fixed;
+        overflow: auto;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        height: 100%;
+        z-index: 999;
+        -webkit-overflow-scrolling: touch;
+        outline: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .am-modal {
+            position: relative;
+
+            .am-modal-content {
+                position: relative;
+                background-color: #fff;
+                border: 0;
+                background-clip: padding-box;
+                text-align: center;
+                height: 100%;
+                overflow: hidden;
+
+                .am-modal-header {
+                    padding: .12rem .3rem .3rem;
+
+                    .am-modal-title {
+                        margin: 0;
+                        font-size: .36rem;
+                        line-height: 1;
+                        color: #000;
+                        text-align: center;
+                    }
+                }
+
+                .am-modal-body {
+                    font-size: .28rem;
+                    color: #888;
+                    height: 100%;
+                    overflow: auto;
+                    line-height: 1.2;
+                }
+
+                .am-modal-footer {
+                    .am-modal-button-group-v {
+                        .am-modal-button {
+                            -webkit-touch-callout: none;
+                            border-top: 1px solid #ddd;
+                            box-sizing: border-box;
+                            text-align: center;
+                            text-decoration: none;
+                            outline: none;
+                            color: #ff0200;
+                            font-size: .32rem;
+                            height: 1rem;
+                            line-height: 1rem;
+                            display: block;
+                            width: auto;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+
+                            &:active {
+                                background-color: #ddd;
+                            }
+                        }
+                    }
+                }
+            }
+
+            &.am-modal-transparent .am-modal-content .am-modal-body {
+                padding: 0 .3rem .3rem;
+            }
+
+            &.am-modal-transparent .am-modal-content {
+                border-radius: 0.14rem;
+                height: auto;
+                padding-top: 0.3rem;
+            }
+        }
+    }
+}

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <link rel="import" href="../head.html?__inline">
+    <title>结算管理</title>
+    <!--SCRIPT_PLACEHOLDER-->
+</head>
+
+<body>
+    <div class="amount-wrapper">
+        <a href="./flow.html" class="remain-amount">
+            <p class="tip">可用余额(元)</p>
+            <div class="amount" id="amount">0.00</div>
+            <i class="right-arrow"></i>
+        </a>
+        <div class="amount-infos">
+            <div class="am-flexbox am-flexbox-justify-between">
+                <div class="amount-item">
+                    <p>总收入(元)</p>
+                    <div class="amount" id="inAmount">0.00</div>
+                </div>
+                <div class="amount-item">
+                    <p>已取现金额(元)</p>
+                    <div class="amount" id="outAmount">0.00</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="amount-btn">
+        <button class="am-button am-button-primary" id="goBtn">提现</button>
+    </div>
+    <link rel="import" href="../footer.html?__inline">
+    <script>
+        require(['app/controller/account/Account']);
+    </script>
+</body>
+
+</html>

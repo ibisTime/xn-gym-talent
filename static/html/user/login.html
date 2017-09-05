@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <link rel="import" href="../head.html?__inline">
+    <title>登录</title>
+    <!--SCRIPT_PLACEHOLDER-->
+</head>
+
+<body>
+    <div class="login-wrapper">
+        <form id="formWrapper" class="form-wrapper">
+            <div class="form-item border-bottom-1px">
+                <div class="am-flexbox">
+                    <span class="item-title">用户名</span>
+                    <input type="tel" placeholder="请输入手机号码" id="loginName" name="loginName" class="input-item"/>
+                </div>
+            </div>
+            <div class="form-item border-bottom-1px">
+                <div class="am-flexbox">
+                    <span class="item-title">密码</span>
+                    <input type="password" placeholder="请输入密码" id="loginPwd" name="loginPwd" class="input-item"/>
+                </div>
+            </div>
+        </form>
+        <div class="login-btn">
+            <div class="top-info clearfix">
+                <a class="fl" href="./findPwd.html">找回密码</a>
+                <a class="fr reg-a" href="./register.html">注册</a>
+            </div>
+            <button id="loginBtn" class="am-button am-button-primary">登录</button>
+        </div>
+    </div>
+    <link rel="import" href="../footer.html?__inline">
+    <script>
+        require(['app/controller/user/Login']);
+    </script>
+</body>
+
+</html>

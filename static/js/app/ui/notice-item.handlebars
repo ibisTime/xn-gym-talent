@@ -1,0 +1,12 @@
+{{#each items}}
+    <li class="notice-item border-bottom-1px">
+        <div class="am-flexbox am-flexbox-align-top">
+            <div class="img"><i class="notice-icon"></i></div>
+            <div class="notice-content am-flexbox-item">
+                <div class="title">{{smsTitle}}</div>
+                <div class="publish-date">{{formatDateTime1 pushedDatetime}}</div>
+                <div class="desc">{{smsContent}}</div>
+            </div>
+        </div>
+    </li>
+{{/each}}

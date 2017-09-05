@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <link rel="import" href="../head.html?__inline">
+    <title>订单详情</title>
+    <!--SCRIPT_PLACEHOLDER-->
+</head>
+
+<body>
+    <div class="confirm-order-wrapper">
+        <div class="confirm-list">
+            <div class="confirm-item border-bottom-1px">
+                <div class="am-flexbox">
+                    <span class="title">订单编号</span>
+                    <div class="text" id="code"></div>
+                </div>
+            </div>
+            <div class="confirm-item border-bottom-1px">
+                <div class="am-flexbox">
+                    <span class="title">下单时间</span>
+                    <div class="text" id="applyDatetime"></div>
+                </div>
+            </div>
+            <div class="confirm-item border-bottom-1px">
+                <div class="am-flexbox">
+                    <span class="title">订单状态</span>
+                    <div class="text am-flexbox-item">
+                        <span id="status"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="confirm-item border-bottom-1px">
+                <div class="am-flexbox">
+                    <span class="title">上课地点</span>
+                    <div class="addr-icon text" id="address"></div>
+                </div>
+            </div>
+            <div class="confirm-item border-bottom-1px">
+                <div class="am-flexbox">
+                    <span class="title">上课时间</span>
+                    <div class="text" id="datetime"></div>
+                </div>
+            </div>
+            <div class="confirm-item border-bottom-1px">
+                <div class="am-flexbox">
+                    <span class="title">上课人数</span>
+                    <div class="text" id="quantity"></div>
+                </div>
+            </div>
+            <div class="confirm-item border-bottom-1px">
+                <div class="am-flexbox">
+                    <span class="title">联系电话</span>
+                    <div class="text" id="mobile"></div>
+                </div>
+            </div>
+            <div class="confirm-item border-bottom-1px">
+                <div class="am-flexbox">
+                    <span class="title">订单金额</span>
+                    <div class="text amount" id="amount">200元</div>
+                </div>
+            </div>
+            <div class="confirm-item border-bottom-1px">
+                <div class="am-flexbox am-flexbox-align-top">
+                    <span class="title">特别嘱咐</span>
+                    <div class="text remark" id="applyNote"></div>
+                </div>
+            </div>
+        </div>
+        <div class="confirm-btn">
+            <button type="button" class="am-button am-button-primary hidden" id="takingOrder">确认接单</button>
+            <button type="button" class="am-button am-button-primary hidden" id="startOrder">上课</button>
+            <button type="button" class="am-button am-button-primary hidden" id="endOrder">下课</button>
+            <button type="button" class="am-button am-button-ghost am-button-cancel hidden" id="cancelOrder">取消</button>
+        </div>
+    </div>
+    <link rel="import" href="../footer.html?__inline">
+    <script src="//api.map.baidu.com/api?v=2.0&ak=GZO262tQ251t2DsFWsQy7A7swoQ4MgyB&s=1"></script>
+    <script>
+        require(['app/controller/order/Order']);
+    </script>
+</body>
+
+</html>

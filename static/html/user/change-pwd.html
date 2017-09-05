@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <link rel="import" href="../head.html?__inline">
+    <title>修改密码</title>
+    <!--SCRIPT_PLACEHOLDER-->
+</head>
+
+<body>
+    <form id="formWrapper" class="form-wrapper">
+        <div class="form-item border-bottom-1px">
+            <div class="am-flexbox">
+                <span class="item-title">原密码</span>
+                <input type="password" placeholder="请输入原密码" name="oldLoginPwd" id="oldLoginPwd" class="input-item"/>
+            </div>
+        </div>
+        <div class="form-item border-bottom-1px">
+            <div class="am-flexbox">
+                <span class="item-title">新密码</span>
+                <input type="password" placeholder="请输入新密码" name="newLoginPwd" id="newLoginPwd" class="input-item"/>
+            </div>
+        </div>
+        <div class="form-item border-bottom-1px">
+            <div class="am-flexbox">
+                <span class="item-title">确认密码</span>
+                <input type="password" placeholder="请再次输入密码" name="rePwd" id="rePwd" class="input-item"/>
+            </div>
+        </div>
+    </form>
+    <div class="primary-wrap">
+        <a id="setPwd" class="am-button am-button-primary">
+            <span>设置</span>
+        </a>
+    </div>
+    <link rel="import" href="../footer.html?__inline">
+    <script>
+        require(['app/controller/user/changePwd']);
+    </script>
+</body>
+
+</html>

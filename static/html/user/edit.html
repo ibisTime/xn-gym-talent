@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <link rel="import" href="../head.html?__inline">
+    <title>形象展示</title>
+    <!--SCRIPT_PLACEHOLDER-->
+</head>
+
+<body>
+    <div class="user-info-wrapper">
+        <div class="reject-infos hidden">审核不通过原因：<span id="remark"></span></div>
+        <form class="info-list" id="formWrapper">
+            <div class="info-item border-bottom-1px">
+                <div class="am-flexbox">
+                    <span class="title">姓名</span>
+                    <input type="text" id="realName" name="realName" class="input-item" placeholder="请输入姓名"/>
+                </div>
+            </div>
+            <div class="info-item">
+                <div class="am-flexbox" id="avatarWrapper">
+                    <span class="title">头像</span>
+                    <div class="input-item right-img">
+                        <input type="file" id="avatar"/>
+                        <img id="avatarImg" src="../../images/图片-(1)@2x.png?__inline">
+                    </div>
+                    <i class="right-arrow"></i>
+                </div>
+                <div class="avatar-progress">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+            </div>
+            <div class="am-whitespace-sm"></div>
+            <div class="info-item border-bottom-1px">
+                <div class="am-flexbox am-flexbox-justify-between">
+                    <span class="title">广告图</span>
+                </div>
+            </div>
+            <div class="info-item img-info-item">
+                <div class="img-wrapper">
+                    <div class="img img-chose" id="bannerWrapper">
+                        <input type="file" id="bannerFile"/>
+                        <i class="add-icon"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="am-whitespace-sm"></div>
+            <div class="info-item border-bottom-1px">
+                <div class="am-flexbox">
+                    <span class="title">年龄</span>
+                    <input type="number" id="age" name="age" class="input-item" placeholder="请输入年龄"/>
+                </div>
+            </div>
+            <div class="info-item border-bottom-1px">
+                <div class="am-flexbox">
+                    <span class="title">性别</span>
+                    <select class="input-item" name="gender" id="gender">
+                        <option value="0">女</option>
+                        <option value="1">男</option>
+                    </select>
+                    <i class="right-arrow"></i>
+                </div>
+            </div>
+            <div class="info-item border-bottom-1px">
+                <div class="am-flexbox">
+                    <span class="title">健身年限</span>
+                    <input type="number" id="duration" name="duration" class="input-item" placeholder="请输入健身年限"/>
+                </div>
+            </div>
+            <div class="info-item">
+                <div class="am-flexbox">
+                    <span class="title">标签</span>
+                    <div id="labelWrapper" class="input-item mb"></div>
+                </div>
+            </div>
+            <div class="am-whitespace-sm"></div>
+            <div class="info-item img-info-item">
+                <div class="textarea">
+                    <textarea name="description" id="description" rows="5" placeholder="个人简介"></textarea>
+                </div>
+                <div class="img-wrapper">
+                    <div class="img img-chose" id="descWrapper">
+                        <input type="file" id="descFile"/>
+                        <i class="add-icon"></i>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="am-whitespace-xxl"></div>
+        <div class="am-whitespace-sm"></div>
+        <div class="user-info-btn">
+            <button id="submitBtn" class="am-button am-button-primary">保存</button>
+        </div>
+    </div>
+    <link rel="import" href="../footer.html?__inline">
+    <script src="../../js/lib/qiniu/plupload.full.min.js"></script>
+    <script src="../../js/lib/qiniu/qiniu.min.js"></script>
+    <script>
+        require(['app/controller/user/Edit']);
+    </script>
+</body>
+
+</html>

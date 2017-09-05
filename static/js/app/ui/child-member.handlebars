@@ -1,0 +1,13 @@
+{{#each items}}
+    <div class="member-item border-bottom-1px">
+        <div class="am-flexbox">
+            <div class="member-avatar">
+                <img src="{{formatAvatar userExt.photo}}"/>
+            </div>
+            <div class="member-info">
+                <div class="member-phone">{{mobile}}</div>
+                <div class="member-time">加入时间：{{formatDateTime1 createDatetime}}</div>
+            </div>
+        </div>
+    </div>
+{{/each}}

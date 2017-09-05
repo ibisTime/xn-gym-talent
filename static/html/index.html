@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <link rel="import" href="head.html?__inline">
+    <title>自玩自健</title>
+    <!--SCRIPT_PLACEHOLDER-->
+</head>
+
+<body class="bg_fff">
+    <div class="user-top-wrap am-flexbox am-flexbox-dir-column">
+        <div class="top-infos">
+            <div id="goSet" class="top-img"><img id="avatar" /></div>
+            <p class="amount-title">
+                <i></i><span>当前总资产 (元)</span></p>
+            <p class="top-amount" id="amount">0.00</p>
+        </div>
+        <span id="hkbtn" class="children">获客</span>
+    </div>
+    <div id="noticeWrap" class="headline-tip am-flexbox am-flexbox-align-middle border-bottom-1px hidden"></div>
+    <div class="category-wrapper">
+        <div class="cateline am-flexbox am-flexbox-justify-between">
+            <div id="skgl" class="cate-item">
+                <div class="cate-icon course-icon"></div>
+                <p>私课管理</p>
+            </div>
+            <div id="xxzs" class="cate-item">
+                <div class="cate-icon image-icon"></div>
+                <p>形象展示</p>
+            </div>
+        </div>
+        <div class="cateline am-flexbox am-flexbox-justify-between">
+            <div id="jdgl" class="cate-item">
+                <div class="cate-icon order-icon"></div>
+                <p>接单管理</p>
+            </div>
+            <div id="jsgl" class="cate-item">
+                <div class="cate-icon settlement-icon"></div>
+                <p>结算管理</p>
+            </div>
+        </div>
+    </div>
+    <link rel="import" href="footer.html?__inline">
+    <script>
+        require(['app/controller/Index']);
+    </script>
+</body>
+
+</html>
