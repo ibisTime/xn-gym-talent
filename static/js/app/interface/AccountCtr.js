@@ -9,6 +9,12 @@ define([
                 userId: base.getUserId()
             }, refresh);
         },
+        // 获取取现、消费、收入金额
+        getInOutAmount(accountNumber, refresh) {
+            return Ajax.get('802902', {
+                accountNumber
+            }, refresh);
+        },
         /**
          * 分页查询流水
          * @param config: {start, limit, accountNumber}

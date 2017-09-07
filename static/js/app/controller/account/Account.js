@@ -5,18 +5,21 @@ define([
     'app/module/setTradePwd'
 ], function(base, UserCtr, AccountCtr, setTradePwd) {
     var tradepwdFlag = false;
+    var count = 3;
+
     init();
     function init() {
         base.showLoading();
-        $.when(
-            getAccount(),
-            getUser()
-        ).then(base.hideLoading);
-    	addListener();
+        getAccount();
+        getUser();
+        addListener();
     }
     function getUser() {
         return UserCtr.getUser()
             .then((data) => {
+                if (!--count) {
+                    base.hideLoading();
+                }
                 if(data.tradepwdFlag != "0"){
                     tradepwdFlag = true;
                 } else {
@@ -33,14 +36,26 @@ define([
     function getAccount() {
         AccountCtr.getAccount()
             .then((data) => {
+                if (!--count) {
+                    base.hideLoading();
+                }
                 data.forEach((account) => {
                     if(account.currency === "CNY"){
                         $("#amount").text(base.formatMoney(account.amount));
-                        $("#inAmount").text(base.formatMoney(account.inAmount));
-                        $("#outAmount").text(base.formatMoney(account.outAmount));
+                        getInOutAmount(account.accountNumber);
                     }
                 });
             });
+    }
+
+    function getInOutAmount(accountNumber) {
+        return AccountCtr.getInOutAmount(accountNumber).then((data) => {
+            if (!--count) {
+                base.hideLoading();
+            }
+            $("#inAmount").text(base.formatMoney(data.inAmount));
+            $("#outAmount").text(base.formatMoney(data.withdrawAmount));
+        });
     }
 
     function addListener() {

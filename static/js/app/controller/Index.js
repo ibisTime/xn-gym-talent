@@ -1,21 +1,19 @@
 define([
     'app/controller/base',
-    'app/interface/GeneralCtr',
     'app/interface/UserCtr',
     'app/interface/AccountCtr',
     'app/module/alertModal'
-], function(base, GeneralCtr, UserCtr, AccountCtr, alertModal) {
+], function(base, UserCtr, AccountCtr, alertModal) {
     const PASSING = 0, PASS = 1, UNPASS = 2, UNAPPLY = -1;
     // 审核状态
     var passStatus = UNAPPLY;
     init();
     function init() {
         base.showLoading();
-    	$.when(
+      	$.when(
             getCoachByUserId(),
-            getAccount(),
-    		getNotice()
-    	).then(base.hideLoading);
+            getAccount()
+      	).then(base.hideLoading);
     	addListener();
     }
     // 获取用户账户
@@ -55,6 +53,12 @@ define([
 
     function addListener() {
         alertModal.addCont();
+        $("#goNotice").click(function() {
+            location.href = './notice/notice.html';
+        });
+        $("#goActivity").click(function() {
+            location.href = C_URL + '/activity/activities.html';
+        });
         // 私课管理
         $("#skgl").click(function() {
             if(passStatus == PASS){
@@ -100,22 +104,6 @@ define([
         $("#amount").click(function() {
             location.href = "./account/flow.html";
         });
-    }
-    //公告
-    function getNotice() {
-    	return GeneralCtr.getPageSysNotice({start: 1, limit: 1})
-            .then(function(data) {
-    			if(data.list.length){
-    				$("#noticeWrap").html(`
-                        <a href="../notice/notice.html" class="am-flexbox am-flexbox-justify-between">
-                            <div class="am-flexbox am-flexbox-item">
-                                <i class="notice-icon"></i>
-                                <span class="am-flexbox-item t-3dot">${data.list[0].smsTitle}</span>
-                            </div>
-                            <i class="right-arrow"></i>
-                        </a>`).removeClass("hidden");
-    			}
-        	});
     }
 
     // 根据状态显示提示信息

@@ -96,39 +96,16 @@ label.error {
     }
 }
 
-
 .headline-tip {
-    padding-left: 0.3rem;
-    padding-right: 0.3rem;
+    padding: 0.1rem 0.3rem;
     height: 1rem;
+    line-height: 0.8rem;
     font-size: 0.28rem;
     background: #fff;
     @include border-bottom-1px($border-color);
 
-    > a {
-        width: 100%;
-
-        span {
-            padding-left: 0.3rem;
-            padding-right: 0.3rem;
-            display: inline-block;
-            vertical-align: middle;
-        }
-
-        i.notice-icon {
-            display: inline-block;
-            width: 0.6rem;
-            height: 0.48rem;
-            vertical-align: middle;
-            @include bg-image('notice');
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: 0.6rem 0.48rem;
-        }
-
-        .right-arrow {
-            height: 0.5rem;
-        }
+    .am-flexbox-item:first-child {
+        @include border-right-1px($border-color);
     }
 }
 

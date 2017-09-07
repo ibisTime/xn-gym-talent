@@ -1,8 +1,9 @@
 define([
     'app/util/dialog',
     'app/util/cookie',
+    'app/util/ajax',
     'app/module/loading'
-], function(dialog, CookieUtil, loading) {
+], function(dialog, CookieUtil, Ajax, loading) {
 
     Date.prototype.format = function(format) {
         var o = {
@@ -293,6 +294,20 @@ define([
             return s;
         }
     };
+
+    if (Base.isLogin()) {
+        Ajax.get("805056", {
+            "userId": Base.getUserId()
+        }).then((data) => {
+            if (data.status != '0') {
+                Base.showMsg('用户被锁定');
+                setTimeout(() => {
+                    Base.clearSessionUser();
+                    Base.goLogin();
+                }, 1000);
+            }
+        });
+    }
 
     return Base;
 });

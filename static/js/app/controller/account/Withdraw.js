@@ -24,15 +24,16 @@ define([
         return GeneralCtr.getPageAccountSysConfig()
             .then((data) => {
                 data.list.forEach((rule) => {
-                    if(rule.ckey == "BUSERMONTIMES") {
+                    if(rule.ckey == "TALENTMONTIMES") {
                         $("#rechargeTimes").text(rule.cvalue);
-                    } else if(rule.ckey == "BUSERQXBS") {
+                    } else if(rule.ckey == "TALENTQXBS") {
                         $("#times").text(rule.cvalue);
-                    } else if(rule.ckey == "BUSERQXSX") {
+                    } else if(rule.ckey == "TALENTQXSX") {
                         $("#toAccount").text(rule.cvalue);
                     } else if(rule.ckey == "QXDBZDJE") {
                         $("#maxAmount").text(rule.cvalue);
-                    } else if(rule.ckey == "BUSERQXFL") {   // 提现费率
+                    } else if(rule.ckey == "TALENTQXFL") {   // 提现费率
+                        $("#toRate").text(rule.cvalue);
                         rate = +rule.cvalue;
                     }
                 });

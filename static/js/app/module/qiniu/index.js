@@ -32,14 +32,6 @@ define(['app/interface/generalCtr'], function(generalCtr) {
                 max_file_size: '100mb', //最大文件体积限制
                 flash_swf_url: __uri("../../lib/qiniu/Moxie.swf"), //引入flash,相对路径
                 multi_selection: multi_selection,
-                filters: {
-                    mime_types: [//只允许上传图片文件 （注意，extensions中，逗号后面不要加空格）
-                        {
-                            title: "图片文件",
-                            extensions: "jpg,jpeg,gif,png,bmp"
-                        }
-                    ]
-                },
                 max_retries: 3, //上传失败最大重试次数
                 chunk_size: '4mb', //分块上传时，每片的体积
                 auto_start: true, //选择文件后自动上传，若关闭需要自己绑定事件触发上传
