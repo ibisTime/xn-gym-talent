@@ -265,8 +265,8 @@ define([
             descPics.forEach(function(pic) {
                 pic_html += `<img src="${PIC_PREFIX + pic}"/>`;
             });
-            description = description.replace(/\n/g, "<br/>").replace(/\s/g, "&nbsp;");
             description = Base.encode(description);
+            description = description.replace(/\s/g, "&nbsp;");
             description += pic_html;
             return description;
         },

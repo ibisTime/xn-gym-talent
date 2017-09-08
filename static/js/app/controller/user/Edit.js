@@ -5,7 +5,8 @@ define([
     'app/module/qiniu',
     'app/module/validate'
 ], function(base, GeneralCtr, UserCtr, qiniu, Validate) {
-    var code, coachLabel, status;
+    var code, coachLabel, status, token;
+    const ADV_PIC = 'ADV_PIC', DESC = 'DESC', AVATAR = 'AVATAR';
     var SUFFIX = "?imageMogr2/auto-orient/thumbnail/!200x200r";
     init();
     function init(){
@@ -36,20 +37,113 @@ define([
     }
     // 当label的数据字典 和 coach 的数据都获取到了之后，再把值添加到页面中
     function addLabelData() {
-        var _labelWrapper = $("#labelWrapper");
-        var labels = coachLabel.split("||");
-        labels.forEach((label) => {
-            _labelWrapper.find("[data-label=" + label + "]").addClass("active");
-        });
+        if (coachLabel) {
+            var _labelWrapper = $("#labelWrapper");
+            var labels = coachLabel.split("||");
+            labels.forEach((label) => {
+                _labelWrapper.find("[data-label=" + label + "]").addClass("active");
+            });
+        }
     }
     // 初始化upload
     function initUpload() {
         return qiniu.getQiniuToken()
             .then((data) => {
-                initBanner(data.uploadToken);
-                initDesc(data.uploadToken);
-                initAvatar(data.uploadToken);
+                token = data.uploadToken;
+                initImgUpload(ADV_PIC);
+                initImgUpload(DESC);
+                initImgUpload(AVATAR);
             });
+    }
+    function initImgUpload(type) {
+        var _fileInput, btnId, containerId, count = 0;
+        if (type === ADV_PIC) {
+           btnId = 'advPicFile';
+           containerId = 'advPicWrapper';
+        } else if (type === DESC) {
+            btnId = 'descFile';
+            containerId = 'descWrapper';
+        } else {
+            btnId = 'avatar';
+            containerId = 'avatarWrapper';
+        }
+        _fileInput = $('#' + btnId);
+        qiniu.uploadInit({
+            token,
+            btnId,
+            containerId,
+            multi_selection: false,
+            showUploadProgress: function(up, file){
+                if (type === AVATAR) {
+                    $("#progressBar").css("width", parseInt(file.percent, 10) + "%");
+                } else {
+                    $("#" + file.id).find(".progress-text").text(parseInt(file.percent, 10) + "%");
+                }
+            },
+            fileAdd: function(file, up){
+                count++;
+                if (type !== AVATAR) {
+                  var _img = $(getInitImgHtml(file));
+                  (function(_img){
+                      _img.find('.close-icon').on('click', function (e) {
+                          count--;
+                          up.removeFile(file);
+                          _img.remove();
+                          var pics = _fileInput.data("pic").split("||");
+                          pics.splice(pics.indexOf(file.id), 1);
+                          pics = pics.length ? pics.join("||") : "";
+                          _fileInput.data("pic", pics);
+                          hideOrShowContainer(type, count, containerId);
+                      });
+                  })(_img)
+                  _img.insertBefore('#' + containerId);
+                  hideOrShowContainer(type, count, containerId);
+                }
+            },
+            fileUploaded: function(up, url, key, file){
+                if (type === AVATAR) {
+                    $("#progressBar").css("width", "0");
+                    $("#avatarImg").attr("src", url + SUFFIX);
+                    _fileInput.data("pic", key);
+                } else {
+                    $("#" + file.id).find(".img-content").html(`<img src="${url + SUFFIX}"/>`);
+                    var pic = _fileInput.data("pic");
+                    pic = pic ? pic + '||' + key : key;
+                    _fileInput.data("pic", pic);
+                }
+            }
+        });
+    }
+    function hideOrShowContainer(type, count, containerId) {
+        var _container = $('#' + containerId);
+        if (type === AVATAR) {
+            return;
+        }
+        if (type === ADV_PIC) {
+            if (count >= 5) {
+                $('#' + containerId).css({
+                  'visibility': 'hidden',
+                  'position': 'absolute'
+                });
+            } else {
+                _container.css({
+                  'visibility': 'visible',
+                  'position': 'relative'
+                });
+            }
+        } else {
+            if (count >= 9) {
+                $('#' + containerId).css({
+                  'visibility': 'hidden',
+                  'position': 'absolute'
+                });
+            } else {
+                _container.css({
+                  'visibility': 'visible',
+                  'position': 'relative'
+                });
+            }
+        }
     }
     // 根据userId查询教练
     function getCoachByUserId() {
@@ -61,25 +155,28 @@ define([
                     $("#remark").text(data.remark).parent().removeClass("hidden");
                 }
                 $("#realName").val(data.realName);
-                $("#avatar").data("pic", data.pic)
-                $("#avatarImg").attr("src", base.getImg(data.pic, SUFFIX));
-                $("#bannerFile").data("pic", data.advPic);
+                data.pic && $("#avatar").data("pic", data.pic)
+                data.pic && $("#avatarImg").attr("src", base.getImg(data.pic, SUFFIX));
+                $("#advPicFile").data("pic", data.advPic);
                 buildAdvImgs(data.advPic);
                 $("#age").val(data.age);
                 $("#gender").val(data.gender);
                 $("#duration").val(data.duration);
+                $('#address').val(data.address);
                 var description = data.description;
-                var descPics = [];
-                description = description.replace(/<img\s+src="([^"]+)"\s*\/>/ig, function(img, pic){
-                    pic = pic.substr(pic.lastIndexOf("/") + 1);
-                    buildDescImg(pic);
-                    descPics.push(pic);
-                    return "";
-                }).replace(/&nbsp;/ig, " ");
-                description = base.decode(description);
-                descPics = descPics.length ? descPics.join("||") : "";
-                $("#descFile").data("pic", descPics);
-                $("#description").val(description);
+                if (description) {
+                    var descPics = [];
+                    description = description.replace(/<img\s+src="([^"]+)"\s*\/>/ig, function(img, pic){
+                        pic = pic.substr(pic.lastIndexOf("/") + 1);
+                        buildDescImg(pic);
+                        descPics.push(pic);
+                        return "";
+                    }).replace(/&nbsp;/ig, " ");
+                    description = base.decode(description);
+                    descPics = descPics.length ? descPics.join("||") : "";
+                    $("#descFile").data("pic", descPics);
+                    $("#description").val(description);
+                }
                 coachLabel = data.label;
                 if(!--count) {
                     addLabelData();
@@ -94,10 +191,10 @@ define([
                     });
             });
     }
-    // 生成广告图
+    // 生成健身照
     function buildAdvImgs(pics) {
         var html = "",
-            _bannerFile = $("#bannerFile");
+            _advPicFile = $("#advPicFile");
         pics = pics.split("||");
         pics.forEach((pic) => {
             var _img = $(`<div class="img" id="${pic}">
@@ -107,16 +204,16 @@ define([
             (function(_img, pic){
                 _img.find('.close-icon').on('click', function (e) {
                     _img.remove();
-                    var pics = _bannerFile.data("pic").split("||");
+                    var pics = _advPicFile.data("pic").split("||");
                     pics.splice(pics.indexOf(pic), 1);
                     pics = pics.length ? pics.join("||") : "";
-                    _bannerFile.data("pic", pics);
+                    _advPicFile.data("pic", pics);
                 });
             })(_img, pic)
-            _img.insertBefore("#bannerWrapper");
+            _img.insertBefore("#advPicWrapper");
         });
     }
-    // 生成店铺的图片
+    // 生成个人详述的图片
     function buildDescImg(pic) {
         var _descFile = $("#descFile");
         var _img = $(`<div class="img" id="${pic}">
@@ -132,98 +229,7 @@ define([
         });
         _img.insertBefore("#descWrapper");
     }
-    // 初始化广告图的图片上传控件
-    function initBanner(token) {
-        var _bannerFile = $("#bannerFile");
-        qiniu.uploadInit({
-            token: token,
-            btnId: "bannerFile",
-            containerId: "bannerWrapper",
-            multi_selection: true,
-            showUploadProgress: function(up, file){
-                $("#" + file.id)
-                    .find(".progress-text").text(parseInt(file.percent, 10) + "%");
-            },
-            fileAdd: function(file, up){
-                var _img = $(getInitImgHtml(file));
-                (function(_img, file){
-                    _img.find('.close-icon').on('click', function (e) {
-                        up.removeFile(file);
-                        _img.remove();
-                        var pics = _bannerFile.data("pic").split("||");
-                        pics.splice(pics.indexOf(file.id), 1);
-                        pics = pics.length ? pics.join("||") : "";
-                        _bannerFile.data("pic", pics);
-                    });
-                })(_img, file)
-                _img.insertBefore("#bannerWrapper");
-            },
-            fileUploaded: function(up, url, key, file){
-                $("#" + file.id).find(".img-content")
-                    .html(`<img src="${url + SUFFIX}"/>`);
 
-                var pic = _bannerFile.data("pic");
-                pic = pic ? pic + '||' + key : key;
-                _bannerFile.data("pic", pic);
-            }
-        });
-    }
-    // 初始化店铺详述的图片上传控件
-    function initDesc(token) {
-        var _descFile = $("#descFile");
-        qiniu.uploadInit({
-            token: token,
-            btnId: "descFile",
-            containerId: "descWrapper",
-            multi_selection: true,
-            showUploadProgress: function(up, file){
-                $("#" + file.id)
-                    .find(".progress-text").text(parseInt(file.percent, 10) + "%");
-            },
-            fileAdd: function(file, up){
-                var _img = $(getInitImgHtml(file));
-                (function(_img, file){
-                    _img.find('.close-icon').on('click', function (e) {
-                        up.removeFile(file);
-                        _img.remove();
-                        var pics = _descFile.data("pic").split("||");
-                        pics.splice(pics.indexOf(file.id), 1);
-                        pics = pics.length ? pics.join("||") : "";
-                        _descFile.data("pic", pics);
-                    });
-                })(_img, file)
-                _img.insertBefore("#descWrapper");
-            },
-            fileUploaded: function(up, url, key, file){
-                $("#" + file.id).find(".img-content")
-                    .html(`<img src="${url + SUFFIX}"/>`);
-
-                var pic = _descFile.data("pic");
-                pic = pic ? pic + '||' + key : key;
-                _descFile.data("pic", pic);
-            }
-        });
-    }
-    // 初始化头像的上传控件
-    function initAvatar(token) {
-        var _progressBar = $("#progressBar");
-        var _avatarImg = $("#avatarImg");
-        qiniu.uploadInit({
-            token: token,
-            btnId: "avatar",
-            containerId: "avatarWrapper",
-            multi_selection: false,
-            showUploadProgress: function(up, file){
-                _progressBar.css("width", parseInt(file.percent, 10) + "%");
-            },
-            fileAdd: function(file, up){},
-            fileUploaded: function(up, url, key, file){
-                _progressBar.css("width", "0");
-                _avatarImg.attr("src", url + SUFFIX);
-                $("#avatar").data("pic", key);
-            }
-        });
-    }
     function getInitImgHtml(file) {
         return `<div class="img" id="${file.id}">
                     <div class="img-content">
@@ -253,6 +259,11 @@ define([
                     required: true,
                     "Z+": true
                 },
+                address: {
+                    required: true,
+                    isNotFace: true,
+                    maxlength: 100
+                },
                 gender: {
                     required: true
                 },
@@ -281,9 +292,9 @@ define([
             return;
         }
         param.pic = pic;
-        var advPic = $("#bannerFile").data("pic");
+        var advPic = $("#advPicFile").data("pic");
         if(!advPic) {
-            base.showMsg("广告图不能为空");
+            base.showMsg("健身照不能为空");
             return;
         }
         param.advPic = advPic;
