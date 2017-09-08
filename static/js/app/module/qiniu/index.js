@@ -59,13 +59,13 @@ define(['app/interface/generalCtr'], function(generalCtr) {
                     },
                     'Error': function(up, err, errTip) {
                         //上传出错时,处理相关的事情
+                        alert(errTip);
                     },
                     'UploadComplete': function() {
                         // 隐藏进度条
                         option.hideUploadProgress && option.hideUploadProgress();
                     },
                     'Key': function(up, file) {
-                        console.log(up, file);
                         // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
                         // 该配置必须要在 unique_names: false , save_key: false 时才生效
                         var sourceLink = file.name;

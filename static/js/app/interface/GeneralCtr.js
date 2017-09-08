@@ -34,7 +34,7 @@ define([
         getPageSysNotice(config, refresh) {
             return Ajax.get("804040", {
                 "pushType": 41,
-                "toKind": 2,
+                "toKind": 3,
                 "channelType": 4,
                 "status": 1,
                 "fromSystemCode": SYSTEM_CODE,

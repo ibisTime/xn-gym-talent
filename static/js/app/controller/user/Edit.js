@@ -8,6 +8,7 @@ define([
     var code, coachLabel, status, token;
     const ADV_PIC = 'ADV_PIC', DESC = 'DESC', AVATAR = 'AVATAR';
     var SUFFIX = "?imageMogr2/auto-orient/thumbnail/!200x200r";
+    var advCount = 0, descCount = 0, avatarCount = 0;
     init();
     function init(){
         base.showLoading();
@@ -16,7 +17,7 @@ define([
             getLabelList(),
             getCoachByUserId()
         ).then(base.hideLoading);
-    	addListener();
+        addListener();
     }
     var count = 2;
     // 获取标签数据字典
@@ -56,10 +57,10 @@ define([
             });
     }
     function initImgUpload(type) {
-        var _fileInput, btnId, containerId, count = 0;
+        var _fileInput, btnId, containerId;
         if (type === ADV_PIC) {
-           btnId = 'advPicFile';
-           containerId = 'advPicWrapper';
+            btnId = 'advPicFile';
+            containerId = 'advPicWrapper';
         } else if (type === DESC) {
             btnId = 'descFile';
             containerId = 'descWrapper';
@@ -81,23 +82,35 @@ define([
                 }
             },
             fileAdd: function(file, up){
-                count++;
+                if (type === AVATAR) {
+                    avatarCount++;
+                } else if (type === ADV_PIC) {
+                    advCount++;
+                } else {
+                    descCount++;
+                }
                 if (type !== AVATAR) {
                   var _img = $(getInitImgHtml(file));
                   (function(_img){
                       _img.find('.close-icon').on('click', function (e) {
-                          count--;
+                          if (type === AVATAR) {
+                              avatarCount--;
+                          } else if (type === ADV_PIC) {
+                              advCount--;
+                          } else {
+                              descCount--;
+                          }
                           up.removeFile(file);
                           _img.remove();
                           var pics = _fileInput.data("pic").split("||");
                           pics.splice(pics.indexOf(file.id), 1);
                           pics = pics.length ? pics.join("||") : "";
                           _fileInput.data("pic", pics);
-                          hideOrShowContainer(type, count, containerId);
+                          hideOrShowContainer(type, containerId);
                       });
                   })(_img)
                   _img.insertBefore('#' + containerId);
-                  hideOrShowContainer(type, count, containerId);
+                  hideOrShowContainer(type, containerId);
                 }
             },
             fileUploaded: function(up, url, key, file){
@@ -114,10 +127,18 @@ define([
             }
         });
     }
-    function hideOrShowContainer(type, count, containerId) {
+    function hideOrShowContainer(type, containerId) {
         var _container = $('#' + containerId);
         if (type === AVATAR) {
             return;
+        }
+        var count = 0;
+        if (type === AVATAR) {
+            count = avatarCount;
+        } else if (type === ADV_PIC) {
+            count = advCount;
+        } else {
+            count = descCount;
         }
         if (type === ADV_PIC) {
             if (count >= 5) {
@@ -155,8 +176,11 @@ define([
                     $("#remark").text(data.remark).parent().removeClass("hidden");
                 }
                 $("#realName").val(data.realName);
-                data.pic && $("#avatar").data("pic", data.pic)
-                data.pic && $("#avatarImg").attr("src", base.getImg(data.pic, SUFFIX));
+                if (data.pic) {
+                    avatarCount = 1;
+                    $("#avatar").data("pic", data.pic);
+                    $("#avatarImg").attr("src", base.getImg(data.pic, SUFFIX));
+                }
                 $("#advPicFile").data("pic", data.advPic);
                 buildAdvImgs(data.advPic);
                 $("#age").val(data.age);
@@ -168,6 +192,7 @@ define([
                     var descPics = [];
                     description = description.replace(/<img\s+src="([^"]+)"\s*\/>/ig, function(img, pic){
                         pic = pic.substr(pic.lastIndexOf("/") + 1);
+                        descCount++;
                         buildDescImg(pic);
                         descPics.push(pic);
                         return "";
@@ -181,6 +206,9 @@ define([
                 if(!--count) {
                     addLabelData();
                 }
+                hideOrShowContainer(ADV_PIC, 'advPicWrapper');
+                hideOrShowContainer(DESC, 'descWrapper');
+                hideOrShowContainer(AVATAR, 'avatarWrapper');
             }, (error, d) => {
                 d && d.close();
                 base.confirm("您需要先完善个人资料并在通过审核后，<br/>才可以使用本系统")
@@ -196,6 +224,7 @@ define([
         var html = "",
             _advPicFile = $("#advPicFile");
         pics = pics.split("||");
+        advCount = pics.length;
         pics.forEach((pic) => {
             var _img = $(`<div class="img" id="${pic}">
                         <div class="img-content"><img src="${base.getImg(pic, SUFFIX)}"></div>
@@ -208,6 +237,8 @@ define([
                     pics.splice(pics.indexOf(pic), 1);
                     pics = pics.length ? pics.join("||") : "";
                     _advPicFile.data("pic", pics);
+                    advCount--;
+                    hideOrShowContainer(ADV_PIC, 'advPicWrapper');
                 });
             })(_img, pic)
             _img.insertBefore("#advPicWrapper");
@@ -226,6 +257,8 @@ define([
             pics.splice(pics.indexOf(pic), 1);
             pics = pics.length ? pics.join("||") : "";
             _descFile.data("pic", pics);
+            descCount--;
+            hideOrShowContainer(DESC, 'descWrapper');
         });
         _img.insertBefore("#descWrapper");
     }
