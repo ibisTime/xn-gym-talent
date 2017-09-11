@@ -6,9 +6,9 @@ define([
     'app/module/validate'
 ], function(base, GeneralCtr, UserCtr, qiniu, Validate) {
     var code, coachLabel, status, token;
-    const ADV_PIC = 'ADV_PIC', DESC = 'DESC', AVATAR = 'AVATAR';
+    const PDF = 'PDF', ADV_PIC = 'ADV_PIC', DESC = 'DESC', AVATAR = 'AVATAR';
     var SUFFIX = "?imageMogr2/auto-orient/thumbnail/!200x200r";
-    var advCount = 0, descCount = 0, avatarCount = 0;
+    var advCount = 0, descCount = 0, avatarCount = 0, pdfCount = 0;
     init();
     function init(){
         base.showLoading();
@@ -64,6 +64,9 @@ define([
         } else if (type === DESC) {
             btnId = 'descFile';
             containerId = 'descWrapper';
+        } else if (type === PDF) {
+            btnId = 'pdfFile';
+            containerId = 'pdfWrapper';
         } else {
             btnId = 'avatar';
             containerId = 'avatarWrapper';
@@ -86,6 +89,8 @@ define([
                     avatarCount++;
                 } else if (type === ADV_PIC) {
                     advCount++;
+                } else if (type === PDF) {
+                    pdfCount++;
                 } else {
                     descCount++;
                 }
@@ -97,6 +102,8 @@ define([
                               avatarCount--;
                           } else if (type === ADV_PIC) {
                               advCount--;
+                          } else if (type === PDF) {
+                              pdfCount--;
                           } else {
                               descCount--;
                           }
@@ -137,11 +144,25 @@ define([
             count = avatarCount;
         } else if (type === ADV_PIC) {
             count = advCount;
+        } else if (type === PDF) {
+            count = pdfCount;
         } else {
             count = descCount;
         }
         if (type === ADV_PIC) {
             if (count >= 5) {
+                $('#' + containerId).css({
+                  'visibility': 'hidden',
+                  'position': 'absolute'
+                });
+            } else {
+                _container.css({
+                  'visibility': 'visible',
+                  'position': 'relative'
+                });
+            }
+        } else if (type === PDF) {
+            if (count >= 2) {
                 $('#' + containerId).css({
                   'visibility': 'hidden',
                   'position': 'absolute'
@@ -172,8 +193,14 @@ define([
             .then((data) => {
                 code = data.code;
                 status = data.status;
-                if(status == "2" && data.remark) {
-                    $("#remark").text(data.remark).parent().removeClass("hidden");
+                if(status == "2") {
+                    $("#pdfOutWrapper").removeClass('hidden');
+                    initImgUpload(PDF);
+                    $("#pdfFile").data("pic", data.pdf);
+                    buildPDFImgs(data.pdf);
+                    if (data.remark) {
+                      $("#remark").text(data.remark).parent().removeClass("hidden");
+                    }
                 }
                 $("#realName").val(data.realName);
                 if (data.pic) {
@@ -209,6 +236,7 @@ define([
                 hideOrShowContainer(ADV_PIC, 'advPicWrapper');
                 hideOrShowContainer(DESC, 'descWrapper');
                 hideOrShowContainer(AVATAR, 'avatarWrapper');
+                hideOrShowContainer(PDF, 'pdfWrapper');
             }, (error, d) => {
                 d && d.close();
                 base.confirm("您需要先完善个人资料并在通过审核后，<br/>才可以使用本系统")
@@ -243,6 +271,33 @@ define([
             })(_img, pic)
             _img.insertBefore("#advPicWrapper");
         });
+    }
+    // 生成身份证
+    function buildPDFImgs(pics) {
+        if (pics) {
+            var html = "",
+                _pdfFile = $("#pdfFile");
+            pics = pics.split("||");
+            pdfCount = pics.length;
+            pics.forEach((pic) => {
+                var _img = $(`<div class="img" id="${pic}">
+                            <div class="img-content"><img src="${base.getImg(pic, SUFFIX)}"></div>
+                            <i class="close-icon"></i>
+                        </div>`);
+                (function(_img, pic){
+                    _img.find('.close-icon').on('click', function (e) {
+                        _img.remove();
+                        var pics = _pdfFile.data("pic").split("||");
+                        pics.splice(pics.indexOf(pic), 1);
+                        pics = pics.length ? pics.join("||") : "";
+                        _pdfFile.data("pic", pics);
+                        pdfCount--;
+                        hideOrShowContainer(PDF, 'pdfWrapper');
+                    });
+                })(_img, pic)
+                _img.insertBefore("#pdfWrapper");
+            });
+        }
     }
     // 生成个人详述的图片
     function buildDescImg(pic) {
@@ -319,6 +374,14 @@ define([
     }
     // 校验表单
     function beforeSubmit(param) {
+        if (status == '2') {
+            var pdfPics = $("#pdfFile").data("pic");
+            if (!pdfPics) {
+                base.showMsg("教练资格证书不能为空");
+                return;
+            }
+            param.pdf = pdfPics;
+        }
         var pic = $("#avatar").data("pic");
         if(!pic) {
             base.showMsg("头像不能为空");
