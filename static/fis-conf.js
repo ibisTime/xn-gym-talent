@@ -7,7 +7,8 @@ fis.hook('amd', {
         'jweixin': 'lib/jweixin-1.0.0',
         'jValidate': "lib/validate/jquery.validate",
         'jquery': "lib/jquery-2.1.4",
-        'swiper': "lib/swiper/swiper-3.3.1.jquery.min"
+        'swiper': "lib/swiper/swiper-3.3.1.jquery.min",
+        'picker': "lib/picker/picker.min.js"
     },
     shim: {
         "IScroll": {

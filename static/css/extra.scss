@@ -821,6 +821,9 @@ label.error {
                 flex: 1;
                 font-size: 0.3rem;
                 color: #333;
+                min-height: .36rem;
+                position: relative;
+                z-index: 15;
 
                 &.mb{
                     margin-bottom: -0.2rem;
@@ -874,6 +877,16 @@ label.error {
                         }
                     }
                 }
+            }
+            .am-flexbox{
+                position: relative;
+            }
+            .placeholder{
+                color: #757575;
+                position: absolute;
+                top: 0;
+                left: 1.6rem;
+                z-index: 11;
             }
 
             .textarea {

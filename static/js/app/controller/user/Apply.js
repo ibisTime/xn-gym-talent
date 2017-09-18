@@ -4,8 +4,9 @@ define([
     'app/interface/UserCtr',
     'app/module/qiniu',
     'app/module/validate',
-    'app/module/alertModal'
-], function(base, GeneralCtr, UserCtr, qiniu, Validate, alertModal) {
+    'app/module/alertModal',
+    'app/module/picker'
+], function(base, GeneralCtr, UserCtr, qiniu, Validate, alertModal, picker) {
     const SUFFIX = "?imageMogr2/auto-orient/thumbnail/!200x200r";
     const PDF = 'PDF', ADV_PIC = 'ADV_PIC', DESC = 'DESC', AVATAR = 'AVATAR';
     var token;
