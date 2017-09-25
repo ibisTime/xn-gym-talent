@@ -3,12 +3,35 @@ define([
     'app/interface/GeneralCtr',
     'app/interface/UserCtr',
     'app/module/qiniu',
-    'app/module/validate'
-], function(base, GeneralCtr, UserCtr, qiniu, Validate) {
+    'app/module/validate',
+    'app/module/clipImg',
+    'node_modules/exif-js/exif',
+    'app/module/picker'
+], function(base, GeneralCtr, UserCtr, qiniu, Validate, clipImg, EXIF, picker) {
     var code, coachLabel, status, token;
     const PDF = 'PDF', ADV_PIC = 'ADV_PIC', DESC = 'DESC', AVATAR = 'AVATAR';
     var SUFFIX = "?imageMogr2/auto-orient/thumbnail/!200x200r";
     var advCount = 0, descCount = 0, avatarCount = 0, pdfCount = 0;
+    var currentItem, _addr;
+    var rules = {
+        age: {
+            required: true,
+            "Z+": true
+        },
+        address: {
+            isNotFace: true,
+            maxlength: 100
+        },
+        duration: {
+            required: true,
+            "Z+": true
+        },
+        description: {
+            required: true,
+            isNotFace: true
+        }
+    };
+
     init();
     function init(){
         base.showLoading();
@@ -17,7 +40,6 @@ define([
             getLabelList(),
             getCoachByUserId()
         ).then(base.hideLoading);
-        addListener();
     }
     var count = 2;
     // 获取标签数据字典
@@ -53,7 +75,6 @@ define([
                 token = data.uploadToken;
                 initImgUpload(ADV_PIC);
                 initImgUpload(DESC);
-                initImgUpload(AVATAR);
             });
     }
     function initImgUpload(type) {
@@ -194,6 +215,19 @@ define([
                 code = data.code;
                 status = data.status;
                 if(status == "2") {
+                    $("#realName1").addClass('hidden');
+                    $("#realName").val(data.realName).removeClass('hidden');
+                    rules.realName = {
+                        required: true,
+                        isNotFace: true,
+                        maxlength: 20
+                    };
+                    $("#gender1").addClass('hidden');
+                    $("#gender").val(data.gender).removeClass('hidden')
+                        .siblings('.right-arrow').removeClass('hidden');
+                    rules.gender = {
+                        required: true
+                    };
                     $("#pdfOutWrapper").removeClass('hidden');
                     initImgUpload(PDF);
                     $("#pdfFile").data("pic", data.pdf);
@@ -201,8 +235,24 @@ define([
                     if (data.remark) {
                       $("#remark").text(data.remark).parent().removeClass("hidden");
                     }
+                } else {
+                    $("#realName").remove();
+                    $("#realName1").text(data.realName);
+                    $("#gender").remove();
+                    $("#gender1").text(({'0': '女', '1': '男'})[data.gender]);
                 }
-                $("#realName").val(data.realName);
+                if (data.province) {
+                  $("#province").val(data.province + ' ' + data.city + ' ' + data.area || '')
+                    .attr("data-prv", data.province)
+                    .attr("data-city", data.city)
+                    .attr("data-area", data.area);
+                };
+                _addr = {
+                    prov: data.province || '',
+                    city: data.city || '',
+                    area: data.area || ''
+                };
+                addListener();
                 if (data.pic) {
                     avatarCount = 1;
                     $("#avatar").data("pic", data.pic);
@@ -329,7 +379,136 @@ define([
                     <i class="close-icon"></i>
                 </div>`;
     }
+
+    function getImgData(fileType, img, dir, next) {
+        let image = new Image();
+        image.onload = function() {
+            let degree = 0;
+            let drawWidth;
+            let drawHeight;
+            let width;
+            let height;
+            drawWidth = this.naturalWidth;
+            drawHeight = this.naturalHeight;
+            let canvas = document.createElement('canvas');
+            canvas.width = width = drawWidth;
+            canvas.height = height = drawHeight;
+            let context = canvas.getContext('2d');
+            // 判断图片方向，重置canvas大小，确定旋转角度，iphone默认的是home键在右方的横屏拍摄方式
+            switch(dir) {
+                // iphone横屏拍摄，此时home键在左侧
+                case 3:
+                    degree = 180;
+                    drawWidth = -width;
+                    drawHeight = -height;
+                    break;
+                // iphone竖屏拍摄，此时home键在下方(正常拿手机的方向)
+                case 6:
+                    canvas.width = height;
+                    canvas.height = width;
+                    degree = 90;
+                    drawWidth = width;
+                    drawHeight = -height;
+                    break;
+                // iphone竖屏拍摄，此时home键在上方
+                case 8:
+                    canvas.width = height;
+                    canvas.height = width;
+                    degree = 270;
+                    drawWidth = -width;
+                    drawHeight = height;
+                    break;
+            }
+            // 使用canvas旋转校正
+            context.rotate(degree * Math.PI / 180);
+            context.drawImage(this, 0, 0, drawWidth, drawHeight);
+            // 返回校正图片
+            next(canvas.toDataURL(fileType, 0.8));
+        };
+        image.src = img;
+    }
+
+    function uploadAvatar(base64) {
+        base64 = base64.substr(base64.indexOf('base64,') + 7);
+        let key = Base64.encode(currentItem.key);
+        return $.ajax({
+            type: 'post',
+            data: base64,
+            url: 'http://up-z2.qiniu.com/putb64/-1/key/' + key,
+            xhr: function() {
+                var xhr = $.ajaxSettings.xhr();
+                xhr.upload.addEventListener('progress', function (e) {
+                    let percent = Math.floor(e.loaded / e.total) * 100;
+                    if (percent == 100) {
+                        percent = 0;
+                    }
+                    $("#progressBar").css("width", percent + "%");
+                }, false);
+                return xhr;
+            },
+            contentType: 'application/octet-stream',
+            headers: {
+                Authorization: `UpToken ${token}`
+            }
+        });
+    }
+
     function addListener(){
+        clipImg.addCont({
+            cancel: function () {
+                $("#userInfoWrapper").show();
+            },
+            chose: function (result) {
+                $("#userInfoWrapper").show();
+                $("#avatarImg").attr('src', result);
+                uploadAvatar(result).then((data) => {
+                    $("#avatar").data("pic", data.key);
+                });
+            }
+        });
+        picker.init({
+          id: '#province',
+          select: function(prov, city, area) {
+            var _nameEl = $("#province");
+            _nameEl.val(prov + ' ' + city + ' ' + area);
+            _nameEl.attr("data-prv", prov);
+            _nameEl.attr("data-city", city);
+            _nameEl.attr("data-area", area);
+          },
+          ..._addr
+        });
+        $('#avatar').on('change', function (e) {
+            let files;
+            let self = this;
+            if (e.dataTransfer) {
+                files = e.dataTransfer.files;
+            } else if (e.target) {
+                files = e.target.files;
+            }
+            files = Array.prototype.slice.call(files, 0, 1);
+            let file = files[0];
+            let orientation;
+            EXIF.getData(file, function() {
+                orientation = EXIF.getTag(this, 'Orientation');
+            });
+            let _url = URL.createObjectURL(file);
+            let reader = new FileReader();
+            reader.onload = function() {
+                getImgData(file.type, this.result, orientation, function(data) {
+                    let item = {
+                        preview: data,
+                        ok: false,
+                        type: file.type,
+                        key: _url.split('/').pop() + '.' + file.name.split('.').pop()
+                    };
+                    currentItem = item;
+                    clipImg.showCont(data, file.type);
+                    $("#userInfoWrapper").hide();
+                    self.value = null;
+                });
+            };
+            reader.readAsDataURL(file);
+        });
         // 标签
         $("#labelWrapper").on("click", ".check-item", function() {
             var _this = $(this);
@@ -337,33 +516,7 @@ define([
         });
         var _formWrapper = $("#formWrapper");
         _formWrapper.validate({
-            'rules': {
-                realName: {
-                    required: true,
-                    isNotFace: true,
-                    maxlength: 20
-                },
-                age: {
-                    required: true,
-                    "Z+": true
-                },
-                address: {
-                    required: true,
-                    isNotFace: true,
-                    maxlength: 100
-                },
-                gender: {
-                    required: true
-                },
-                duration: {
-                    required: true,
-                    "Z+": true
-                },
-                description: {
-                    required: true,
-                    isNotFace: true
-                }
-            },
+            'rules': rules,
             onkeyup: false
         });
         $("#submitBtn").on("click", function() {
@@ -374,6 +527,17 @@ define([
     }
     // 校验表单
     function beforeSubmit(param) {
+        var province = $("#province");
+        var prov = province.attr('data-prv');
+        if (!prov) {
+            base.showMsg('授课区域不能为空');
+            return;
+        }
+        var city = province.attr('data-city');
+        var area = province.attr('data-area');
+        param.province = prov;
+        param.city = city;
+        param.area = area;
         if (status == '2') {
             var pdfPics = $("#pdfFile").data("pic");
             if (!pdfPics) {

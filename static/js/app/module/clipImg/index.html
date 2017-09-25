@@ -1,0 +1,12 @@
+<div class="clip-img-wrapper" id="clipImgWrapper">
+    <img id="oriImg" class="outer-img" crossOrigin="anonymous"/>
+    <div class="clip-wrapper">
+        <img id="innerImg" class="inner-img origin"/>
+        <img id="clipImg" class="inner-img"/>
+        <div id="clipBox" class="clip-box"></div>
+        <div class="bottom">
+            <span class="cancel" @click.stop="cancel">取消</span><span class="chose" @click.stop="choseImg">完成</span>
+        </div>
+        <canvas class="canvas" id="canvas"></canvas>
+    </div>
+</div>

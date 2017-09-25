@@ -18,5 +18,8 @@
     "fis3-hook-commonjs": "^0.1.26",
     "fis3-postpackager-loader": "^2.1.4",
     "fis3-preprocessor-autoprefixer": "^0.1.1"
+  },
+  "dependencies": {
+    "exif-js": "^2.3.0"
   }
 }

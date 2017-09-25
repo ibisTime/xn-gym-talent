@@ -8,20 +8,21 @@
 </head>
 
 <body>
-    <div class="user-info-wrapper">
+    <div class="user-info-wrapper" id="userInfoWrapper">
         <div class="reject-infos hidden">审核不通过原因：<span id="remark"></span></div>
         <form class="info-list" id="formWrapper">
             <div class="info-item border-bottom-1px">
                 <div class="am-flexbox">
                     <span class="title">姓名</span>
-                    <input type="text" id="realName" name="realName" class="input-item" placeholder="请输入姓名"/>
+                    <div id="realName1" class="input-item"></div>
+                    <input type="text" id="realName" name="realName" class="input-item hidden" placeholder="请输入姓名"/>
                 </div>
             </div>
             <div class="info-item">
                 <div class="am-flexbox" id="avatarWrapper">
                     <span class="title">头像</span>
                     <div class="input-item right-img">
-                        <input type="file" id="avatar"/>
+                        <input type="file" accept="image/*" id="avatar"/>
                         <img id="avatarImg" src="../../images/图片-(1)@2x.png?__inline">
                     </div>
                     <i class="right-arrow"></i>
@@ -39,11 +40,12 @@
             <div class="info-item border-bottom-1px">
                 <div class="am-flexbox">
                     <span class="title">性别</span>
-                    <select class="input-item" name="gender" id="gender">
+                    <div id="gender1" class="input-item"></div>
+                    <select class="input-item hidden" name="gender" id="gender">
                         <option value="0">女</option>
                         <option value="1">男</option>
                     </select>
-                    <i class="right-arrow"></i>
+                    <i class="right-arrow hidden"></i>
                 </div>
             </div>
             <div class="info-item border-bottom-1px">
@@ -55,7 +57,13 @@
             <div class="info-item border-bottom-1px">
                 <div class="am-flexbox">
                     <span class="title">健身地址</span>
-                    <input type="text" name="address" id="address" class="input-item" placeholder="请输入健身地址"/>
+                    <input type="text" name="address" id="address" class="input-item" placeholder="请输入健身地址(选填)"/>
+                </div>
+            </div>
+            <div class="info-item border-bottom-1px">
+                <div class="am-flexbox">
+                    <span class="title">授课区域</span>
+                    <input id="province" name="province" class="input-item" placeholder="请选择授课区域" readonly/>
                 </div>
             </div>
             <div class="info-item">
@@ -114,8 +122,10 @@
         </div>
     </div>
     <link rel="import" href="../footer.html?__inline">
+    <script src="../../js/lib/city.js"></script>
     <script src="../../js/lib/qiniu/plupload.full.min.js"></script>
     <script src="../../js/lib/qiniu/qiniu.min.js"></script>
+    <script src="../../js/lib/base64.min.js"></script>
     <script>
         require(['app/controller/user/Edit']);
     </script>

@@ -2,8 +2,9 @@ define([
     'app/controller/base',
     'app/interface/UserCtr',
     'app/interface/AccountCtr',
+    'app/interface/GeneralCtr',
     'app/module/alertModal'
-], function(base, UserCtr, AccountCtr, alertModal) {
+], function(base, UserCtr, AccountCtr, GeneralCtr, alertModal) {
     const PASSING = 0, PASS = 1, UNPASS = 2, UNAPPLY = -1;
     // 审核状态
     var passStatus = UNAPPLY;
@@ -14,7 +15,18 @@ define([
             getCoachByUserId(),
             getAccount()
       	).then(base.hideLoading);
-    	addListener();
+        getUnReadCount();
+        addListener();
+    }
+    function getUnReadCount() {
+        GeneralCtr.getUnReadNoticeCount().then((data) => {
+            if (+data > 0) {
+                $("#noRead").html(`<span class="am-badge am-badge-not-a-wrapper"><sup class="am-badge-text">${data}</sup></span>`);
+            } else {
+                $("#noRead").empty();
+            }
+            setTimeout(getUnReadCount, 3000);
+        });
     }
     // 获取用户账户
     function getAccount() {

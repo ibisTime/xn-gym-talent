@@ -26,10 +26,17 @@ define([
                 if (totalCount <= config.limit || lists.length < config.limit) {
                     isEnd = true;
                 }
-    			if(data.list.length) {
+          			if(data.list.length) {
                     $("#content").append(_tmpl({items: data.list}));
+                    let ids = [];
+                    data.list.forEach((item) => {
+                        item.isRead === '0' && ids.push(item.id);
+                    });
+                    if (ids.length) {
+                        GeneralCtr.readNotices(ids);
+                    }
                     isEnd && $("#loadAll").removeClass("hidden");
-    			} else if(config.start == 1) {
+                } else if(config.start == 1) {
                     $("#content").html('<li class="no-data">暂无公告</li>')
                 } else {
                     $("#loadAll").removeClass("hidden");

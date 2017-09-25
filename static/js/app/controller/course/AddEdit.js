@@ -41,6 +41,8 @@ define([
                 $("#skCycle").val(data.skCycle);
                 $("#week").text($("#skCycle").find("option:selected").text());
                 $("#price").val(base.formatMoney(data.price));
+                $("#totalNum").val(data.totalNum);
+                $("#address").val(data.address);
             });
     }
     function addListener(){
@@ -111,6 +113,15 @@ define([
                 },
                 skEndDatetime: {
                     required: true
+                },
+                totalNum: {
+                    required: true,
+                    'Z+': true
+                },
+                address: {
+                    required: true,
+                    maxlength: 100,
+                    isNotFace: true
                 },
                 price: {
                     required: true,

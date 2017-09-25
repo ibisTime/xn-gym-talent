@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <div class="user-info-wrapper">
+    <div class="user-info-wrapper" id="userInfoWrapper">
         <form class="info-list" id="formWrapper">
             <div class="info-item border-bottom-1px">
                 <div class="am-flexbox">
@@ -20,7 +20,7 @@
                 <div class="am-flexbox" id="avatarWrapper">
                     <span class="title">头像</span>
                     <div class="input-item right-img">
-                        <input type="file" id="avatar"/>
+                        <input type="file" accept="image/*" id="avatar"/>
                         <img id="avatarImg" src="../../images/图片-(1)@2x.png?__inline">
                     </div>
                     <i class="right-arrow"></i>
@@ -54,8 +54,13 @@
             <div class="info-item border-bottom-1px">
                 <div class="am-flexbox">
                     <span class="title">健身地址</span>
-                    <div id="address" name="address" class="input-item" ></div>
-                    <samp class="input-item placeholder">请选择健身地址</samp>
+                    <input type="text" name="address" id="address" class="input-item" placeholder="请输入健身地址(选填)"/>
+                </div>
+            </div>
+            <div class="info-item border-bottom-1px">
+                <div class="am-flexbox">
+                    <span class="title">授课区域</span>
+                    <input id="province" name="province" class="input-item" placeholder="请选择授课区域" readonly/>
                 </div>
             </div>
             <div class="info-item">
@@ -111,9 +116,10 @@
         </div>
     </div>
     <link rel="import" href="../footer.html?__inline">
-	<script src="../../js/lib/city.js"></script>
+	  <script src="../../js/lib/city.js"></script>
     <script src="../../js/lib/qiniu/plupload.full.min.js"></script>
     <script src="../../js/lib/qiniu/qiniu.min.js"></script>
+    <script src="../../js/lib/base64.min.js"></script>
     <script>
         require(['app/controller/user/Apply']);
     </script>

@@ -1,6 +1,7 @@
 define([
+    'app/controller/base',
     'app/util/ajax'
-], function(Ajax) {
+], function(base, Ajax) {
     return {
         // 加载七牛token
         getQiniuToken() {
@@ -38,8 +39,23 @@ define([
                 "channelType": 4,
                 "status": 1,
                 "fromSystemCode": SYSTEM_CODE,
+                userId: base.getUserId(),
                 ...config
             }, refresh);
+        },
+        // 未读公告统计
+        getUnReadNoticeCount() {
+            return Ajax.get('804500', {
+                userId: base.getUserId(),
+                kind: '3'
+            }, true);
+        },
+        // 阅读公告
+        readNotices(smsIdList) {
+            return Ajax.get('804100', {
+                smsIdList,
+                userId: base.getUserId()
+            });
         },
         // 查询数据字典列表
         getDictList(parentKey, code = "807706"){

@@ -107,6 +107,10 @@ label.error {
     .am-flexbox-item:first-child {
         @include border-right-1px($border-color);
     }
+
+    .am-badge {
+        margin-left: 0.1rem;
+    }
 }
 
 .right-arrow {
