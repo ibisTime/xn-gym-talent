@@ -5,7 +5,7 @@ define([
     'app/interface/GeneralCtr',
     'app/module/alertModal'
 ], function(base, UserCtr, AccountCtr, GeneralCtr, alertModal) {
-    const PASSING = 0, PASS = 1, UNPASS = 2, UNAPPLY = -1;
+    const PASSING = 0, PASS = 1, UNPASS = 2, UNAPPLY = -1, ON_SHELF = 3, OFF_SHELF = 4;
     // 审核状态
     var passStatus = UNAPPLY;
     init();
@@ -45,13 +45,15 @@ define([
             .then((data) => {
                 $("#avatar").attr("src", base.getAvatar(data.pic));
                 passStatus = data.status;
-                // 0待审批，1 审批通过，2 审批不通过
+                // 0待审批，1 审批通过，2 审批不通过, 3 已上架, 4 已下架
                 if(data.status == PASSING) {
                     alertModal.showCont("您的资料还在审批中，请耐心等待");
                 } else if(data.status == UNPASS) {
                     alertModal.showCont("非常抱歉，你的资料未通过审核。请修改资料后，重新提交申请", () => {
                         location.href = "./user/edit.html?code=1";
                     });
+                } else if (data.status == OFF_SHELF) {
+                    alertModal.showCont("您已经被平台下架");
                 }
             }, (error, d) => {
                 d && d.close();
@@ -73,7 +75,7 @@ define([
         });
         // 私课管理
         $("#skgl").click(function() {
-            if(passStatus == PASS){
+            if(passStatus == PASS || passStatus == ON_SHELF || passStatus == OFF_SHELF){
                 location.href = "./course/list.html";
             } else {
                 showConfirm();
@@ -81,7 +83,7 @@ define([
         });
         // 形象展示
         $("#xxzs").click(function() {
-            if(passStatus == PASS){
+            if(passStatus == PASS || passStatus == ON_SHELF || passStatus == OFF_SHELF){
                 location.href = "./user/edit.html";
             } else {
                 showConfirm();
@@ -89,7 +91,7 @@ define([
         });
         // 接单管理
         $("#jdgl").click(function() {
-            if(passStatus == PASS){
+            if(passStatus == PASS || passStatus == ON_SHELF || passStatus == OFF_SHELF){
                 location.href = "./order/orders.html";
             } else {
                 showConfirm();
@@ -97,7 +99,7 @@ define([
         });
         // 结算管理
         $("#jsgl").click(function() {
-            if(passStatus == PASS){
+            if(passStatus == PASS || passStatus == ON_SHELF || passStatus == OFF_SHELF){
                 location.href = "./account/account.html";
             } else {
                 showConfirm();

@@ -93,7 +93,7 @@ define([
                     <a href="./order.html?code=${item.code}" class="order-item-cont">
                         <div class="am-flexbox am-flexbox-align-top">
                             <div class="order-img">
-                                <img src="${base.getImg(item.coach.pic, SUFFIX)}"/>
+                                <img src="${base.getAvatar(item.coach.pic, SUFFIX)}"/>
                             </div>
                             <div class="order-name-infos am-flexbox-item">
                                 <div class="am-flexbox am-flexbox-dir-column am-flexbox-justify-between am-flexbox-align-top">

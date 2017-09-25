@@ -482,6 +482,12 @@ label.error {
             text-align: right;
             padding-right: 0.3rem;
         }
+
+        span.title {
+            display: inline-block;
+            width: 1.7rem;
+            flex: 0 0 1.7rem;
+        }
     }
 }
 
@@ -522,7 +528,7 @@ label.error {
                 width: 100%;
 
                 .order-img {
-                    width: 2rem;
+                    width: 1.5rem;
                     height: 1.5rem;
 
                     img {
@@ -797,6 +803,7 @@ label.error {
         .info-item {
             position: relative;
             padding: 0.3rem;
+            overflow-x: hidden;
             background: #fff;
 
             .right-arrow {
