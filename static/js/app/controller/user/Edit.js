@@ -273,6 +273,10 @@ define([
                 if (description) {
                     var descPics = [];
                     description = description.replace(/<img\s+src="([^"]+)"\s*\/>/ig, function(img, pic){
+                        var index = pic.indexOf('?imageMogr2/auto-orient');
+                        if (~index) {
+                            pic = pic.substr(0, index);
+                        }
                         pic = pic.substr(pic.lastIndexOf("/") + 1);
                         descCount++;
                         buildDescImg(pic);

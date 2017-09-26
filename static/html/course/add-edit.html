@@ -109,9 +109,13 @@
             </div>
             <i class="right-arrow"></i>
         </div>
-        <div class="course-item border-bottom-1px am-flexbox">
-            <span class="title">上课地点</span>
-            <input class="amount-input am-flexbox-item" type="tel" id="address" name="address" placeholder="请输入上课地点"/>
+        <div class="course-item border-bottom-1px">
+            <div class="am-flexbox wp100">
+              <span class="title">上课地点</span>
+              <div class="over-addr am-flexbox-item" id="addrWrap">请输入上课地点</div>
+              <input type="text" id="address" name="address" class="text v-hide" />
+              <i class="right-arrow"></i>
+            </div>
         </div>
         <div class="course-item border-bottom-1px am-flexbox">
             <span class="title">最多上课人数</span>
@@ -127,6 +131,7 @@
     </div>
     <link rel="import" href="../footer.html?__inline">
     <script src="../../js/lib/j_picker/jquery-weui.min.js"></script>
+    <script src="//api.map.baidu.com/api?v=2.0&ak=GZO262tQ251t2DsFWsQy7A7swoQ4MgyB&s=1"></script>
     <script>
         require(['app/controller/course/AddEdit']);
     </script>

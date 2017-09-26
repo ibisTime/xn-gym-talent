@@ -1,7 +1,8 @@
 define([
     'jquery',
-    'picker'
-], function ($, Picker) {
+    'picker',
+    'lib/city'
+], function ($, Picker, city) {
 
   var first = []; /* 省，直辖市 */
 	var second = []; /* 市 */

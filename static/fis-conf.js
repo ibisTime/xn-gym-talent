@@ -70,6 +70,10 @@ fis.media("prod")
             }
         })
     })
+    .match('/js/lib/polyfill.min.js', {
+        packTo: '/pkg/common.js',
+        packOrder: -110
+    })
     .match('/js/require.js', {
         packTo: '/pkg/common.js',
         packOrder: -100

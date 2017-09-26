@@ -2,8 +2,9 @@ define([
     'app/controller/base',
     'app/interface/CourseCtr',
     'app/interface/UserCtr',
-    'app/module/validate'
-], function(base, CourseCtr, UserCtr, Validate) {
+    'app/module/validate',
+    'app/module/searchMap'
+], function(base, CourseCtr, UserCtr, Validate, searchMap) {
     var code = base.getUrlParam("code");
     var course, coachCode;
 
@@ -22,6 +23,9 @@ define([
             getCoachByUserId().then(() => {
                 base.hideLoading();
                 $("#week").text($("#skCycle").find("option:selected").text());
+                searchMap.addMap({
+                    initInDW: true
+                });
                 addListener();
             });
         }
@@ -42,10 +46,29 @@ define([
                 $("#week").text($("#skCycle").find("option:selected").text());
                 $("#price").val(base.formatMoney(data.price));
                 $("#totalNum").val(data.totalNum);
-                $("#address").val(data.address);
+                if (data.address) {
+                    $("#address").val(data.address);
+                    $("#addrWrap").text(data.address);
+                    searchMap.addMap({
+                        initAddr: data.address
+                    });
+                } else {
+                    searchMap.addMap({
+                        initInDW: true
+                    });
+                }
             });
     }
     function addListener(){
+        // 点击显示地图
+        $("#addrWrap").on("click", function() {
+            searchMap.showMap({
+                success: function(point, address) {
+                    $("#address").val(address).valid();
+                    $("#addrWrap").text(address);
+                }
+            });
+        });
         var hours = ['00', '01', '02', '03', '04', '05', '06', '07',
             '08', '09', '10', '11', '12', '13', '14', '15', '16',
             '17', '18', '19', '20', '21', '22', '23'],

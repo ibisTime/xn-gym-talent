@@ -263,7 +263,7 @@ define([
         getDescription: function(description, descPics) {
             var pic_html = "";
             descPics.forEach(function(pic) {
-                pic_html += `<img src="${PIC_PREFIX + pic}"/>`;
+                pic_html += `<img src="${PIC_PREFIX + pic + '?imageMogr2/auto-orient'}"/>`;
             });
             description = Base.encode(description);
             description = description.replace(/\s/g, "&nbsp;");

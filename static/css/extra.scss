@@ -488,6 +488,27 @@ label.error {
             width: 1.7rem;
             flex: 0 0 1.7rem;
         }
+
+        .text {
+            font-size: 0.3rem;
+            color: #333;
+            -webkit-box-flex: 1;
+            -webkit-flex: 1;
+            -moz-box-flex: 1;
+            -ms-flex: 1;
+            flex: 1;
+
+            &.v-hide {
+                visibility: hidden;
+                position: absolute;
+            }
+        }
+
+        .over-addr {
+            width: 100%;
+            font-size: 0.3rem;
+            color: #333;
+        }
     }
 }
 

@@ -1,4 +1,4 @@
-var city = [{
+var cityData = [{
   'name': '安徽省',
   'sub': [{
     'name': '安庆市',
@@ -7610,3 +7610,5 @@ var city = [{
     }]
   }]
 }];
+
+define(function() { return cityData; });
