@@ -2,11 +2,13 @@ define([
     'app/controller/base',
     'app/interface/CourseCtr',
     'app/interface/UserCtr',
+    'app/interface/GeneralCtr',
     'app/module/validate',
     'app/module/searchMap'
-], function(base, CourseCtr, UserCtr, Validate, searchMap) {
+], function(base, CourseCtr, UserCtr, GeneralCtr, Validate, searchMap) {
     var code = base.getUrlParam("code");
     var course, coachCode;
+    var defAddr;
 
     init();
     function init(){
@@ -14,21 +16,37 @@ define([
         if(code) {
             $.when(
                 getCoachByUserId(),
-                getCourse()
+                getCourse(),
+                getDefAddr()
             ).then(() => {
                 base.hideLoading();
                 addListener();
+                setTimeout(() => {
+                    $("#J_SearchMapInput").attr("placeholder", defAddr);
+                }, 100);
             });
         } else {
-            getCoachByUserId().then(() => {
+            $.when(
+                getCoachByUserId(),
+                getDefAddr()
+            ).then(() => {
                 base.hideLoading();
                 $("#week").text($("#skCycle").find("option:selected").text());
                 searchMap.addMap({
                     initInDW: true
                 });
                 addListener();
+                setTimeout(() => {
+                    $("#J_SearchMapInput").attr("placeholder", defAddr);
+                }, 100);
             });
         }
+    }
+    // 获取默认的地址
+    function getDefAddr() {
+        return GeneralCtr.getUserSysConfig('default_address').then((data) => {
+            defAddr = data.cvalue;
+        });
     }
     // 根据userId详情查询私教
     function getCoachByUserId(userId, refresh) {
