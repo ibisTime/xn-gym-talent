@@ -8,7 +8,7 @@ define([
 ], function(base, CourseCtr, UserCtr, GeneralCtr, Validate, searchMap) {
     var code = base.getUrlParam("code");
     var course, coachCode;
-    var defAddr;
+    var defAddr, maxPrice;
 
     init();
     function init(){
@@ -17,6 +17,7 @@ define([
             $.when(
                 getCoachByUserId(),
                 getCourse(),
+                getMaxPrice(),
                 getDefAddr()
             ).then(() => {
                 base.hideLoading();
@@ -28,6 +29,7 @@ define([
         } else {
             $.when(
                 getCoachByUserId(),
+                getMaxPrice(),
                 getDefAddr()
             ).then(() => {
                 base.hideLoading();
@@ -41,6 +43,12 @@ define([
                 }, 100);
             });
         }
+    }
+    function getMaxPrice() {
+        return GeneralCtr.getBizSysConfig('courseMaxPrice').then((data) => {
+            maxPrice = +data.cvalue;
+            $("#price").attr('placeholder', `课程价格不能超过${maxPrice}元`);
+        });
     }
     // 获取默认的地址
     function getDefAddr() {
@@ -143,6 +151,12 @@ define([
                 _skEndDatetime.valid();
             }
         }).val(`${skEndDatetime[0]} : ${skEndDatetime[1]}`);
+
+        $.validator.addMethod("maxP", function(value, element) {
+            value = +value;
+            return value <= maxPrice;
+        }, '价格不能超过' + maxPrice + '元');
+
         var _formWrapper = $("#formWrapper");
         _formWrapper.validate({
             'rules': {
@@ -166,10 +180,10 @@ define([
                 },
                 price: {
                     required: true,
-                    amount: true
+                    amount: true,
+                    maxP: true
                 }
-            },
-            onkeyup: false
+            }
         });
         $("#saveBtn").click(function(){
             if(_formWrapper.valid()){

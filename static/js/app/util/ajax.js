@@ -78,6 +78,9 @@ define([
                 return res.data;
             }).fail(function(error){
                 loading.hideLoading();
+                if (typeof error == 'object') {
+                    showMsg(error.statusText || error.responseText);
+                }
             });
         }
     };

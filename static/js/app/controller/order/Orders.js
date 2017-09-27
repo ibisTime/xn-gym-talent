@@ -2,8 +2,9 @@ define([
     'app/controller/base',
     'app/util/dict',
     'app/interface/CourseCtr',
+    'app/interface/GeneralCtr',
     'app/module/scroll'
-], function(base, Dict, CourseCtr, scroll) {
+], function(base, Dict, CourseCtr, GeneralCtr, scroll) {
     var config = {
         start: 1,
         limit: 10
@@ -21,14 +22,29 @@ define([
             "6": "8"
         };
     const SUFFIX = "?imageMogr2/auto-orient/thumbnail/!150x113r";
-    var myScroll;
+    var myScroll, rate1, rate2, rate3;
 
     init();
     function init(){
         initScroll();
         addListener();
         base.showLoading();
-        getPageOrders();
+        $.when(
+            getPageOrders(),
+            getConfigs()
+        ).then(base.hideLoading);
+    }
+    // 获取违约金比率
+    function getConfigs() {
+        return $.when(
+            GeneralCtr.getBizSysConfig('MWY'),
+            GeneralCtr.getBizSysConfig('QMWY'),
+            GeneralCtr.getBizSysConfig('SMWY')
+        ).then((data1, data2, data3) => {
+            rate1 = +data1.cvalue * 100 + "%";
+            rate2 = +data2.cvalue * 100 + "%";
+            rate3 = +data3.cvalue * 100 + "%";
+        });
     }
     function initScroll() {
         var width = 0;
@@ -57,7 +73,6 @@ define([
             ...config
         }, refresh)
             .then((data) => {
-                base.hideLoading();
                 hideLoading(currentType);
                 var lists = data.list;
                 var totalCount = +data.totalCount;
@@ -119,10 +134,10 @@ define([
                                     ${
                                         item.status == "1"
                                             ? `<button class="am-button am-button-small taking-order" data-code="${item.code}">接单</button>
-                                                <button class="am-button am-button-small cancel-order" data-code="${item.code}">取消订单</button>`
+                                                <button class="am-button am-button-small cancel-order" data-status="${item.status}" data-code="${item.code}">取消订单</button>`
                                             : item.status == "2"
                                                 ? `<button class="am-button am-button-small start-order" data-code="${item.code}">上课</button>
-                                                    <button class="am-button am-button-small cancel-order" data-code="${item.code}">取消订单</button>`
+                                                    <button class="am-button am-button-small cancel-order" data-status="${item.status}" data-code="${item.code}">取消订单</button>`
                                                 : `<button class="am-button am-button-small end-order" data-code="${item.code}">下课</button>`
                                     }
                                 </div>`
@@ -147,7 +162,7 @@ define([
                 currentType = index;
                 config.start = 1;
                 base.showLoading();
-                getPageOrders();
+                getPageOrders().then(base.hideLoading);
             }
         });
         // 接单
@@ -161,14 +176,20 @@ define([
                             base.showMsg("操作成功");
                             base.showLoading();
                             config.start = 1;
-                            getPageOrders(true);
+                            getPageOrders(true).then(base.hideLoading);
                         });
                 }, () => {});
         });
         // 取消订单
         $("#orderWrapper").on("click", ".cancel-order", function() {
             var orderCode = $(this).attr("data-code");
-            base.confirm("确定取消订单吗？", "取消", "确认")
+            var _orderStatus = $(this).attr('data-status');
+            var str = '确定取消订单吗？';
+            if (status != '1') {
+                str += `<div style="font-size: 12px;color: #999;padding-top: 4px;">
+                  上课前两小时外取消扣${rate1}订单金额，两小时内取消扣${rate2}订单金额，过了上课时间取消扣${rate3}订单金额</div>`;
+            }
+            base.confirm(str, "取消", "确认")
                 .then(() => {
                     base.showLoading("取消中...");
                     CourseCtr.cancelOrder(orderCode)
@@ -176,7 +197,7 @@ define([
                             base.showMsg("操作成功");
                             base.showLoading();
                             config.start = 1;
-                            getPageOrders(true);
+                            getPageOrders(true).then(base.hideLoading);
                         });
                 }, () => {});
         });
@@ -191,7 +212,7 @@ define([
                             base.showMsg("操作成功");
                             base.showLoading();
                             config.start = 1;
-                            getPageOrders(true);
+                            getPageOrders(true).then(base.hideLoading);
                         });
                 }, () => {});
         });
@@ -206,7 +227,7 @@ define([
                             base.showMsg("操作成功");
                             base.showLoading();
                             config.start = 1;
-                            getPageOrders(true);
+                            getPageOrders(true).then(base.hideLoading);
                         });
                 }, () => {});
         });

@@ -70,7 +70,8 @@ define([], function() {
                      border: '0 none',
                      background: 'transparent'
                      */
-                    outline: 0
+                    outline: 0,
+                    'max-width': '80%'
                 })
                 .attr('tabindex', '-1')
                 .html(this.innerHTML)
