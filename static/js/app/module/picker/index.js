@@ -115,6 +115,7 @@ define([
 
   	_nameEl.on('click', function (e) {
       e.preventDefault();
+      this.blur();
   		picker.show();
   	});
   }
