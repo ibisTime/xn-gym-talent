@@ -6,9 +6,8 @@ define([
     'app/module/validate',
     'app/module/alertModal',
     'app/module/clipImg',
-    'node_modules/exif-js/exif',
     'app/module/picker'
-], function(base, GeneralCtr, UserCtr, qiniu, Validate, alertModal, clipImg, EXIF, picker) {
+], function(base, GeneralCtr, UserCtr, qiniu, Validate, alertModal, clipImg, picker) {
     const SUFFIX = "?imageMogr2/auto-orient/thumbnail/!200x200r";
     const PDF = 'PDF', ADV_PIC = 'ADV_PIC', DESC = 'DESC', AVATAR = 'AVATAR';
     var token;

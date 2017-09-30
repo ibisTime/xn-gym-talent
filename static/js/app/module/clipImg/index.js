@@ -86,6 +86,7 @@ define([
     touch.y1 = firstTouch.pageY;
   }
   function handleTouchMove(e) {
+    e.preventDefault();
     let firstTouch = e.originalEvent.changedTouches[0];
     touch.y2 = firstTouch.pageY;
     let delta = (touch.y2 - touch.y1) / 10;
