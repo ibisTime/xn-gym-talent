@@ -1,7 +1,7 @@
 {{#each items}}
     <li class="course-item border-bottom-1px">
-        <span class="week">{{formatWeek skCycle}}</span>
-        <span>{{formatDayTime skStartDatetime}}-{{formatDayTime skEndDatetime}}</span>
+        <span class="week">{{formatDate skEndDatetime}}</span>
+        <span>{{formatTime skStartDatetime}}-{{formatTime  skEndDatetime}}</span>
         <div class="delete" data-code="{{code}}">
             <i class="delete-icon"></i><span>删除</span>
         </div>

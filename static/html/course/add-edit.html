@@ -81,8 +81,10 @@
     <form id="formWrapper" class="course-wrapper">
         <div class="course-item border-bottom-1px am-flexbox am-flexbox-justify-between">
             <div class="am-flexbox am-flexbox-item am-flexbox-justify-between">
-                <span class="title">周几上课</span>
-                <select class="over-select am-flexbox-item" name="skCycle" id="skCycle">
+                <span class="title">上课时间</span>
+                <!-- <input  id="skDate"  name="skDate" type="date" value="" placeholder="上课日期"> -->
+                <input id="skDate" name="skDate" class="time-select am-flexbox-item" placeholder="请选择日期"  readonly/>
+                <!-- <select class="over-select am-flexbox-item" name="skCycle" id="skCycle">
                     <option value="2">周一</option>
                     <option value="3">周二</option>
                     <option value="4">周三</option>
@@ -90,7 +92,7 @@
                     <option value="6">周五</option>
                     <option value="7">周六</option>
                     <option value="1">周日</option>
-                </select>
+                </select> -->
                 <span class="fr" id="week"></span>
             </div>
             <i class="right-arrow"></i>

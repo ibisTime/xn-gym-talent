@@ -118,7 +118,7 @@ define([
                                             <div class="order-status">${orderStatus[item.status]}</div>
                                         </div>
                                         <div class="order-infos">
-                                            <span class="pdr">${base.formatDate(item.appointDatetime, "MM-dd")} ${item.skDatetime.substr(0, 5)}~${item.xkDatetime.substr(0, 5)}</span><span class="pdr pdl">${item.quantity}人</span><span class="pdl">¥${base.formatMoney(item.amount)}</span>
+                                            <span class="pdr">${base.formatDate(item.skDatetime, "yyyy-MM-dd hh:mm")}~${base.formatDate(item.xkDatetime, "hh:mm")}</span><span class="pdr pdl">${item.quantity}人</span><span class="pdl">¥${base.formatMoney(item.amount)}</span>
                                         </div>
                                     </div>
                                     <div class="order-addr">
